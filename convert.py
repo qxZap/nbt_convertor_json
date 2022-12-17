@@ -21,6 +21,9 @@ def get_input_files():
         input_files.append(INPUT_FOLDER+input_file_from_folder)
     return input_files
 
+def does_file_exist(filepath):
+    return os.path.exists(filepath)
+
 NBT_TO_JSON_COMMAND = "nbt -r {} --pretty --json > {}"
 JSON_TO_NBT_COMMAND = "nbt -s {} -w {}"
 
@@ -31,6 +34,12 @@ for input_file in input_files:
         command = NBT_TO_JSON_COMMAND.format(input_file,new_file_name)
     elif input_file.endswith(JSON_EXT):
         command = JSON_TO_NBT_COMMAND.format(input_file,new_file_name).replace(OUTPUT_FOLDER,'')
+
+    if does_file_exist(new_file_name.replace(OUTPUT_FOLDER,'')):
+        os.remove(new_file_name.replace(OUTPUT_FOLDER,''))
+    if does_file_exist(new_file_name):
+        os.remove(new_file_name)
     os.system(command)
-    # shutil.move(new_file_name.replace(OUTPUT_FOLDER,''),new_file_name)
+    if does_file_exist(new_file_name.replace(OUTPUT_FOLDER,'')):
+        shutil.move(new_file_name.replace(OUTPUT_FOLDER,''),new_file_name)
 
