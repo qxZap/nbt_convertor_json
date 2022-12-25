@@ -67,7 +67,11 @@ def inject_entyties_if_present(input_file_path):
         input_file.close()
         json_data = json.loads(str_data)
 
+        if "entities" not in json_data[""]:
+            json_data[""]["entities"] = []
+
         new_json_data = set_entities_in_json_data(json_data,entity_json_data)
+        
         if json_data[""]["entities"] != new_json_data[""]["entities"]:
             with open(input_file_path, "w") as write_file:
                 json.dump(new_json_data, write_file, indent=4)
@@ -88,6 +92,7 @@ for input_file in input_files:
         os.remove(new_file_name.replace(OUTPUT_FOLDER,''))
     if does_file_exist(new_file_name):
         os.remove(new_file_name)
+    
     os.system(command)
     if does_file_exist(new_file_name.replace(OUTPUT_FOLDER,'')):
         shutil.move(new_file_name.replace(OUTPUT_FOLDER,''),new_file_name)
